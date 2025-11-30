@@ -1,0 +1,25 @@
+
+docker exec -it spark-master bash
+/spark/bin/spark-shell               // mở spark shell
+
+docker exec -it spark-master /spark/bin/pyspark //pyspark chạy python
+
+
+
+
+
+docker exec -it spark-master /spark/bin/spark-submit --master spark://spark-master:7077 /opt/spark-apps/aggregate_example.py 
+     //Chạy master worker thật
+
+     
+docker exec -it spark-master /spark/bin/spark-submit --master local[*] /opt/spark-apps/wordcount.py 
+
+//chạy local
+
+//Hướng dẫn
+$docker cp wordcount.py spark-master:/opt/spark-apps/wordcount.py
+
+$docker exec -it spark-master ls /opt/spark-apps
+
+$docker exec -it spark-master /spark/bin/spark-submit --master spark://spark-master:7077 /opt/spark-apps/wordcount.py
+

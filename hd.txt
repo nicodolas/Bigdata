@@ -1,0 +1,15 @@
+# ===== BƯỚC 1: COPY FILE DỮ LIỆU TỪ MÁY LOCAL → NAMENODE =====
+docker cp datafile.txt namenode:/tmp/datafile.txt
+
+# ===== BƯỚC 2: ĐƯA FILE VÀO HDFS =====
+docker exec -it namenode bash
+    hdfs dfs -mkdir -p /input
+    hdfs dfs -put /tmp/datafile.txt /input/
+    hdfs dfs -ls /input
+    exit
+    
+# ===== BƯỚC 3: COPY FILE PYTHON VÀO SPARK MASTER =====
+docker cp wordcount.py spark-master:/opt/spark-apps/wordcount.py
+
+# ===== BƯỚC 4: CHẠY SPARK JOB Ở CHẾ ĐỘ MASTER–WORKER THẬT =====
+docker exec -it spark-master /spark/bin/spark-submit --master spark://spark-master:7077 /opt/spark-apps/wordcount.py
