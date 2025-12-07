@@ -3,18 +3,15 @@ from pyspark.sql.functions import monotonically_increasing_id, row_number
 from pyspark.sql.window import Window
 import re
 
-spark = SparkSession.builder.appName("ETL-HarryPotter-Fixed").getOrCreate()
+spark = SparkSession.builder.appName("ETL-HarryPotter").getOrCreate()
 sc = spark.sparkContext
 
-# ==== 1. Đọc dữ liệu từ HDFS ====
 lines = sc.textFile("hdfs://namenode:8020/input/harrypotter.txt")
 lines_with_index = lines.zipWithIndex()
 
-# ==== 2. Hàm nhận diện chương đúng theo file ====
 def detect_chapter(line):
     return bool(re.match(r"chapter\s+[a-z\-]+", line.lower().strip()))
 
-# ==== 3. Chuyển chữ sang số chương ====
 NUM_MAP = {
     "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
     "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
@@ -32,7 +29,6 @@ def extract_chapter_number(line):
         return NUM_MAP.get(word, None)
     return None
 
-# ==== 4. Gán chapter_number cho từng dòng ====
 current_chapter = None
 def assign_chapter(row):
     global current_chapter
@@ -49,7 +45,6 @@ chapter_rdd = lines_with_index.map(assign_chapter).filter(
 
 chapter_df = spark.createDataFrame(chapter_rdd, ["chapter_number", "raw_text"])
 
-# ==== 5. Tách câu ====
 def split_sentences(text):
     sentences = re.split(r"[.!?]+", text)
     return [s.strip() for s in sentences if len(s.strip()) > 0]
@@ -60,16 +55,12 @@ sentences_rdd = chapter_df.rdd.flatMap(
 
 sentences_df = spark.createDataFrame(sentences_rdd, ["chapter_number", "sentence_text"])
 
-# ==== 6. Thêm sentence_number ====
 window = Window.partitionBy("chapter_number").orderBy(monotonically_increasing_id())
 
 final_df = sentences_df.withColumn(
     "sentence_number",
     row_number().over(window)
 ).select("chapter_number", "sentence_number", "sentence_text")
-
-# ==== 7. Xuất kết quả ====
-final_df.show(20, truncate=120)
 
 final_df.write.mode("overwrite").parquet(
     "hdfs://namenode:8020/output/harrypotter_structured"
