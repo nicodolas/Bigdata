@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   spark-master:
-    build: ./spark-master
+    image: bde2020/spark-master:3.3.0-hadoop3.3
     container_name: spark-master
     ports:
       - "8080:8080"
@@ -11,15 +11,7 @@ services:
       - "18080:18080"
     environment:
       - INIT_DAEMON_STEP=setup_spark
-      - SPARK_WORKER_MEMORY=4g
-
-      # 🔴 BẮT BUỘC: bật History Server
-      - ENABLE_HISTORY_SERVER=true
-
-      # 🔴 BẮT BUỘC: bật event log
-      - SPARK_EVENTLOG_ENABLED=true
-
-      # 🔴 History đọc log từ thư mục mount
+      - SPARK_WORKER_MEMORY=2g
       - SPARK_HISTORY_OPTS=-Dspark.history.fs.logDirectory=/spark-logs
     volumes:
       - ./apps:/opt/spark-apps
@@ -30,7 +22,7 @@ services:
       - bigdata_network
 
   spark-worker:
-    build: ./spark-worker
+    image: bde2020/spark-worker:3.3.0-hadoop3.3
     container_name: spark-worker
     depends_on:
       - spark-master
@@ -38,15 +30,8 @@ services:
       - "8081:8081"
     environment:
       - SPARK_MASTER=spark://spark-master:7077
-      - SPARK_WORKER_CORES=6
-      - SPARK_WORKER_MEMORY=4g
-
-      # 🔴 Worker cũng phải bật event log
-      - SPARK_EVENTLOG_ENABLED=true
-      
-      # 🔴 Set Python version
-      - PYSPARK_PYTHON=python3
-      - PYSPARK_DRIVER_PYTHON=python3
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_MEMORY=2g
     volumes:
       - ./apps:/opt/spark-apps
     networks:

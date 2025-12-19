@@ -1,0 +1,46 @@
+Đồ Án Môn Học 
+Xây dựng Pipeline Big Data Phân tán
+Môn học: Thực hành Big Data
+Thời gian: 2 Tuần
+Nền tảng: Local Hadoop/Spark Cluster (Docker/VMs/Linux)
+
+Tổng quan
+Kiến thức cần có: Thuần thục xây dựng một cụm Big Data (HDFS + Spark). 
+
+Nhiệm vụ: Xây dựng một Pipeline Phân tán End-to-End: 
+
+Nạp dữ liệu thô (Ingest) → Xử lý & Làm sạch (ETL bằng Spark) → Ứng dụng AI/ML (PyTorch/SparkML) → Trích xuất thông tin giá trị (Business Insight).
+
+Yêu cầu kỹ thuật
+Đồ án phải tuân thủ nghiêm ngặt các quy tắc sau:
+Bắt buộc dùng HDFS: Dữ liệu đầu vào thô (Raw Data) phải được upload lên HDFS trước khi xử lý. Không được đọc trực tiếp từ ổ cứng máy thật (Local OS).
+Cấm dùng vòng lặp Local: Tuyệt đối không sử dụng vòng lặp for của Python để duyệt qua từng file (ví dụ: os.listdir). Phải sử dụng Spark RDD hoặc DataFrame.
+AI Phân tán (Distributed Inference): Model AI/ML phải được chạy bên trong các Spark Workers (sử dụng UDFs hoặc Spark MLlib). 
+Lưu trữ: Kết quả trung gian và cuối cùng phải được ghi ngược lại HDFS dưới định dạng Parquet.
+Bằng chứng (History & Logs): Sinh viên bắt buộc phải cấu hình và bật Spark History Server.
+Cấu hình để Spark ghi log sự kiện vào HDFS (ví dụ: /spark-logs hoặc /tmp).
+Báo cáo phải có ảnh chụp màn hình từ WebUI (port 18080) chứng minh các Stage/Task đã chạy song song.
+
+Sinh viên chọn MỘT trong hai đề tài dưới đây. Cả hai đề tài đều được thiết kế để gây khó khăn cho một máy tính cá nhân nếu chỉ dùng code Python thông thường mà không tận dụng sức mạnh phân tán.
+Option 1: The Deepfake Hunter (Xử lý Ảnh)
+Kịch bản: Xây dựng một pipeline có khả năng mở rộng để quét hàng nghìn ảnh mỗi ngày nhằm phát hiện ảnh do AI tạo ra.
+
+1. Dữ liệu (Dataset)
+Nguồn: CIFAKE (Real vs. AI-Generated)
+Khối lượng: ~100.000 file ảnh nhỏ .jpg (32x32).
+
+2. Yêu cầu Pipeline
+Step 1: Nạp dữ liệu (Ingestion)
+Step 2: Trích xuất Đặc trưng (Feature Extracttion)
+Sinh viên KHÔNG được dùng model "Deepfake Detector" có sẵn.
+Trích xuất đặc trưng từ các ảnh bằng model train trên ImageNet như: ResNet50, MobileNetV2
+Step 3: Phân loại Phân tán (Distributed Classification)
+Chuyển đổi mảng đặc trưng thành kiểu dữ liệu Vector của Spark ML.
+Sử dụng Spark MLlib để huấn luyện một bộ phân loại cổ điển (ví dụ: LogisticRegression hoặc RandomForest) trên các vector này để dự đoán "Real" vs "Fake".
+Step 4: Kiểm tra kết quả mô hình.
+
+3. Kết quả (Business Insight)
+Báo cáo các chỉ số Accuracy, Precision, và Recall của mô hình lai (Hybrid Model) này.
+Trả lời câu hỏi: Liệu model được chọn có trích xuất đủ thông tin để phát hiện Deepfake không?
+
+

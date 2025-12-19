@@ -1,0 +1,13 @@
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("CheckFeatures").getOrCreate()
+df = spark.read.parquet("hdfs://namenode:8020/data/processed/cifake_features")
+print("="*60)
+print(f"✅ STEP 2 RESULT: {df.count()} feature vectors extracted!")
+print("="*60)
+print("\n📐 Schema:")
+df.printSchema()
+print("\n📊 Sample (3 rows):")
+df.select("label", "features").show(3, truncate=50)
+print("\n📈 Label distribution:")
+df.groupBy("label").count().show()
+spark.stop()

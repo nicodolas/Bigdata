@@ -1,0 +1,3 @@
+ // cách chạy pig trên namenode
+ docker exec -it namenode bash
+    pig -f /opt/pig-scripts/flight_delay.pig    

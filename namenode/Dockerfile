@@ -1,0 +1,17 @@
+FROM bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+
+# Fix APT repo for Debian Stretch (archive)
+RUN echo 'deb http://archive.debian.org/debian stretch main contrib non-free' > /etc/apt/sources.list && \
+    echo 'deb http://archive.debian.org/debian-security stretch/updates main' >> /etc/apt/sources.list && \
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99noexpiry && \
+    echo 'Acquire::AllowInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99noexpiry && \
+    apt-get update --allow-unauthenticated --allow-insecure-repositories && \
+    apt-get install -y wget tar --allow-unauthenticated
+
+# Install Apache Pig
+RUN wget https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz && \
+    tar -xvf pig-0.17.0.tar.gz && mv pig-0.17.0 /opt/pig
+
+# Add Pig to PATH
+ENV PIG_HOME=/opt/pig
+ENV PATH=$PATH:/opt/pig/bin
