@@ -1,0 +1,116 @@
+org.apache.spark.deploy.master.Master running as process 25.  Stop it first.
+org.apache.spark.deploy.history.HistoryServer running as process 94.  Stop it first.
+25/12/21 06:51:12 INFO SparkContext: Running Spark version 3.3.0
+25/12/21 06:51:12 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+25/12/21 06:51:12 INFO ResourceUtils: ==============================================================
+25/12/21 06:51:12 INFO ResourceUtils: No custom resources configured for spark.driver.
+25/12/21 06:51:12 INFO ResourceUtils: ==============================================================
+25/12/21 06:51:12 INFO SparkContext: Submitted application: CIFAKE-Step-4-Simple-Demo
+25/12/21 06:51:13 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 1, script: , vendor: , memory -> name: memory, amount: 3072, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+25/12/21 06:51:13 INFO ResourceProfile: Limiting resource is cpu
+25/12/21 06:51:13 INFO ResourceProfileManager: Added ResourceProfile id: 0
+25/12/21 06:51:13 INFO SecurityManager: Changing view acls to: root
+25/12/21 06:51:13 INFO SecurityManager: Changing modify acls to: root
+25/12/21 06:51:13 INFO SecurityManager: Changing view acls groups to: 
+25/12/21 06:51:13 INFO SecurityManager: Changing modify acls groups to: 
+25/12/21 06:51:13 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(root); groups with view permissions: Set(); users  with modify permissions: Set(root); groups with modify permissions: Set()
+25/12/21 06:51:13 INFO Utils: Successfully started service 'sparkDriver' on port 44771.
+25/12/21 06:51:13 INFO SparkEnv: Registering MapOutputTracker
+25/12/21 06:51:13 INFO SparkEnv: Registering BlockManagerMaster
+25/12/21 06:51:13 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+25/12/21 06:51:13 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+25/12/21 06:51:13 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+25/12/21 06:51:13 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-475edbf3-6473-4700-b0c3-b6c22ebec164
+25/12/21 06:51:13 INFO MemoryStore: MemoryStore started with capacity 2004.6 MiB
+25/12/21 06:51:13 INFO SparkEnv: Registering OutputCommitCoordinator
+25/12/21 06:51:14 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+25/12/21 06:51:14 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+25/12/21 06:51:14 INFO TransportClientFactory: Successfully created connection to spark-master/172.19.0.3:7077 after 34 ms (0 ms spent in bootstraps)
+25/12/21 06:51:14 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20251221065114-0000
+25/12/21 06:51:14 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 43531.
+25/12/21 06:51:14 INFO NettyBlockTransferService: Server created on 84196068b032:43531
+25/12/21 06:51:14 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+25/12/21 06:51:14 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20251221065114-0000/0 on worker-20251221053115-172.19.0.5-35699 (172.19.0.5:35699) with 6 core(s)
+25/12/21 06:51:14 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 84196068b032, 43531, None)
+25/12/21 06:51:14 INFO StandaloneSchedulerBackend: Granted executor ID app-20251221065114-0000/0 on hostPort 172.19.0.5:35699 with 6 core(s), 3.0 GiB RAM
+25/12/21 06:51:14 INFO BlockManagerMasterEndpoint: Registering block manager 84196068b032:43531 with 2004.6 MiB RAM, BlockManagerId(driver, 84196068b032, 43531, None)
+25/12/21 06:51:14 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 84196068b032, 43531, None)
+25/12/21 06:51:14 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 84196068b032, 43531, None)
+25/12/21 06:51:15 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20251221065114-0000/0 is now RUNNING
+25/12/21 06:51:15 INFO SingleEventLogFileWriter: Logging events to hdfs://namenode:8020/spark-logs/app-20251221065114-0000.inprogress
+25/12/21 06:51:16 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+============================================================
+STEP 4: INFERENCE DEMO (Simplified Version)
+============================================================
+[INFO] Loading features from: hdfs://namenode:8020/data/processed/cifake_features
+[INFO] Selected 6 samples for demonstration
+[INFO] Saving demo samples to: hdfs://namenode:8020/data/demo/sample_prediction
+[OK] Demo data saved to HDFS in Parquet format!
+
+[INFO] Demo data schema:
+root
+ |-- features: vector (nullable = true)
+ |-- label: long (nullable = true)
+
+
+[INFO] Loading trained model from: hdfs://namenode:8020/models/cifake_classifier
+
+============================================================
+PREDICTION RESULTS
+============================================================
+
+Sample 1:
+  Actual:     FAKE
+  Predicted:  FAKE
+  Confidence: 99.15%
+  Correct:    ✓
+
+Sample 2:
+  Actual:     FAKE
+  Predicted:  FAKE
+  Confidence: 99.16%
+  Correct:    ✓
+
+Sample 3:
+  Actual:     REAL
+  Predicted:  REAL
+  Confidence: 99.97%
+  Correct:    ✓
+
+Sample 4:
+  Actual:     REAL
+  Predicted:  REAL
+  Confidence: 99.77%
+  Correct:    ✓
+
+Sample 5:
+  Actual:     REAL
+  Predicted:  REAL
+  Confidence: 91.44%
+  Correct:    ✓
+
+Sample 6:
+  Actual:     REAL
+  Predicted:  REAL
+  Confidence: 86.56%
+  Correct:    ✓
+
+============================================================
+Demo Accuracy: 6/6 = 100.0%
+============================================================
+
+============================================================
+BUSINESS INSIGHT - Trả lời câu hỏi:
+============================================================
+Câu hỏi: Liệu model có trích xuất đủ thông tin để phát hiện Deepfake?
+
+Trả lời: CÓ - Minh chứng:
+1. ✓ Vector đặc trưng 1280 chiều đã được trích xuất thành công
+2. ✓ Dữ liệu đã lưu vào HDFS định dạng Parquet 
+3. ✓ Model load và dự đoán chính xác trên dữ liệu mới
+4. ✓ Độ chính xác demo: 100.0% - chứng minh đặc trưng đủ mạnh
+5. ✓ Confidence score cao cho thấy model tự tin vào quyết định
+
+Kết luận: MobileNetV2 đã trích xuất ĐỦ THÔNG TIN cần thiết
+để phân biệt ảnh thật và ảnh AI-generated (Deepfake).
+============================================================
